@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import styles from './TodoList.module.css';
 
 const TodoList = ({ todos, setTodos, setCalendarEvents }) => {
   const [newTodo, setNewTodo] = useState('');
@@ -35,14 +36,15 @@ const TodoList = ({ todos, setTodos, setCalendarEvents }) => {
   };
 
   return (
-    <div>
-      <h2>ToDo List</h2>
-      <div>
+    <div className={styles.todoContainer}>
+      <h2 className={styles.heading}>ToDo List</h2>
+      <div className={styles.inputContainer}>
         <input
           type="text"
           value={newTodo}
           onChange={(e) => setNewTodo(e.target.value)}
           placeholder="Event Name"
+          className={styles.input}
         />
         <DatePicker
           selected={newTodoStartTime}
@@ -50,6 +52,7 @@ const TodoList = ({ todos, setTodos, setCalendarEvents }) => {
           showTimeSelect
           dateFormat="Pp"
           placeholderText="Start Time"
+          className={styles.input}
         />
         <DatePicker
           selected={newTodoEndTime}
@@ -57,14 +60,15 @@ const TodoList = ({ todos, setTodos, setCalendarEvents }) => {
           showTimeSelect
           dateFormat="Pp"
           placeholderText="End Time"
+          className={styles.input}
         />
-        <button onClick={handleAddTodo}>Add</button>
+        <button onClick={handleAddTodo} className={styles.addButton}>Add</button>
       </div>
-      <ul>
+      <ul className={styles.todoList}>
         {todos.map((event, index) => (
-          <li key={index}>
+          <li key={index} className={styles.todoItem}>
             {event.todo} ({event.startTime.toString()} - {event.endTime.toString()})
-            <button onClick={() => handleDeleteTodo(index)}>Delete</button>
+            <button onClick={() => handleDeleteTodo(index)} className={styles.deleteButton}>Delete</button>
           </li>
         ))}
       </ul>

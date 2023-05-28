@@ -1,0 +1,131 @@
+.pageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.todoContainer {
+  text-align: center;
+  padding: 20px;
+}
+
+.heading {
+  text-align: center;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.input {
+  width: 200px;
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+}
+
+.addButton {
+  padding: 8px 16px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 20px;
+  transition: background-color 0.3s ease;
+  opacity: 0.9;
+}
+
+.addButton:hover {
+  background-color: #3d8b3d;
+  opacity: 1;
+}
+
+.addButton:active {
+  background-color: #367c36;
+}
+
+.deleteButton {
+  padding: 6px 12px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 20px;
+  transition: background-color 0.3s ease;
+  opacity: 0.9;
+}
+
+.deleteButton:hover {
+  background-color: #e53935;
+  opacity: 1;
+}
+
+.deleteButton:active {
+  background-color: #c62828;
+}
+
+.todoList {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.todoItem {
+  margin-bottom: 5px;
+}
+
+.react-datepicker-wrapper {
+  display: inline-block;
+}
+
+.react-datepicker__input-container input {
+  width: 150px;
+  padding: 6px;
+  border-radius: 4px;
+}
+
+.react-datepicker {
+  font-size: 14px;
+  width: 180px;
+  border-radius: 4px;
+}
+
+.react-datepicker__month-container {
+  padding: 8px;
+}
+
+.react-datepicker__month {
+  margin: 0;
+}
+
+.react-datepicker__day {
+  padding: 6px;
+}
+
+.react-datepicker__day-names {
+  margin: 0;
+  padding: 8px 0;
+  display: flex;
+  justify-content: space-around;
+}
+
+.react-datepicker__week {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 4px;
+}
+
+.react-datepicker__day--keyboard-selected {
+  background-color: #e6e6e6;
+}
+
+.react-datepicker__day--selected {
+  background-color: #4caf50;
+  color: white;
+}
+
+
