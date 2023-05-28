@@ -3,15 +3,30 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
+  background-color: #67abf5; /* Updated color to light blue */
+  background-image: linear-gradient(to bottom, #76b9f0 50%, #368fee 50%);
+  background-size: 100% 200%;
+  transition: background-position 0.5s;
+}
+
+.pageContainer:hover {
+  background-position: 0 100%;
 }
 
 .todoContainer {
   text-align: center;
   padding: 20px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .heading {
   text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #0366d6;
+  margin-bottom: 20px;
 }
 
 .inputContainer {
@@ -25,47 +40,37 @@
   width: 200px;
   padding: 8px;
   margin-bottom: 10px;
-  border-radius: 4px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
 }
 
 .addButton {
   padding: 8px 16px;
-  background-color: #4caf50;
+  background-color: #0366d6; /* Updated color to blue */
   color: white;
   border: none;
+  border-radius: 6px;
   cursor: pointer;
-  border-radius: 20px;
-  transition: background-color 0.3s ease;
   opacity: 0.9;
+  transition: opacity 0.3s;
 }
 
 .addButton:hover {
-  background-color: #3d8b3d;
   opacity: 1;
 }
-
-.addButton:active {
-  background-color: #367c36;
-}
-
 .deleteButton {
   padding: 6px 12px;
-  background-color: #f44336;
+  background-color: #cb2431;
   color: white;
   border: none;
+  border-radius: 6px;
   cursor: pointer;
-  border-radius: 20px;
-  transition: background-color 0.3s ease;
   opacity: 0.9;
+  transition: opacity 0.3s;
 }
 
 .deleteButton:hover {
-  background-color: #e53935;
   opacity: 1;
-}
-
-.deleteButton:active {
-  background-color: #c62828;
 }
 
 .todoList {
@@ -76,6 +81,11 @@
 
 .todoItem {
   margin-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+  color: #24292e;
 }
 
 .react-datepicker-wrapper {
@@ -85,13 +95,16 @@
 .react-datepicker__input-container input {
   width: 150px;
   padding: 6px;
-  border-radius: 4px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
 }
 
 .react-datepicker {
   font-size: 14px;
   width: 180px;
-  border-radius: 4px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .react-datepicker__month-container {
@@ -124,8 +137,6 @@
 }
 
 .react-datepicker__day--selected {
-  background-color: #4caf50;
+  background-color: #0366d6;
   color: white;
 }
-
-
