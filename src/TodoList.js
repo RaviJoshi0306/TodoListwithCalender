@@ -383,35 +383,34 @@ const TodoList = ({ todos, setTodos }) => {
     const [draggedTodo] = updatedTodos.splice(source.index, 1);
     updatedTodos.splice(destination.index, 0, draggedTodo);
 
-    // Retrieve the original start and end time of the dragged event
     const draggedStartTime = draggedTodo.startTime;
     const draggedEndTime = draggedTodo.endTime;
 
-    // Check if the dragged event starts and ends on the same day
-    const sameDayEvent = draggedStartTime.getDate() === draggedEndTime.getDate();
+    const updatedTodosWithTime = updatedTodos.map((todo, index) => {
+      if (index === destination.index) {
+        const newStartTime = new Date(draggedStartTime);
+        const newEndTime = new Date(draggedEndTime);
 
-    // Update the todos array with the new position of the dragged event
-    setTodos(
-      updatedTodos.map((todo, index) => {
-        if (index === destination.index) {
-          const newStartTime = new Date(draggedStartTime);
-          const newEndTime = new Date(draggedEndTime);
+        if (destination.date) {
+          newStartTime.setFullYear(destination.date.getFullYear());
+          newStartTime.setMonth(destination.date.getMonth());
+          newStartTime.setDate(destination.date.getDate());
 
-          // Update the start and end time if the event is dragged to a different day
-          if (!sameDayEvent) {
-            newStartTime.setDate(destination.date.getDate());
-            newEndTime.setDate(destination.date.getDate());
-          }
-
-          return {
-            ...todo,
-            startTime: newStartTime,
-            endTime: newEndTime,
-          };
+          newEndTime.setFullYear(destination.date.getFullYear());
+          newEndTime.setMonth(destination.date.getMonth());
+          newEndTime.setDate(destination.date.getDate());
         }
-        return todo;
-      })
-    );
+
+        return {
+          ...todo,
+          startTime: newStartTime,
+          endTime: newEndTime,
+        };
+      }
+      return todo;
+    });
+
+    setTodos(updatedTodosWithTime);
   };
 
   const handleDragStart = (start) => {
@@ -504,12 +503,8 @@ const TodoList = ({ todos, setTodos }) => {
                             {formatDateTime(todo.startTime)} - {formatDateTime(todo.endTime)}
                           </div>
                           <div className={styles.todoActions}>
-                            <button onClick={() => handleEditTodo(index)} className={styles.editButton}>
-                              Edit
-                            </button>
-                            <button onClick={() => handleDeleteTodo(index)} className={styles.deleteButton}>
-                              Delete
-                            </button>
+                            <button onClick={() => handleEditTodo(index)}>Edit</button>
+                            <button onClick={() => handleDeleteTodo(index)}>Delete</button>
                           </div>
                         </>
                       )}
