@@ -293,7 +293,11 @@
 // };
 
 // export default TodoList;
-import React, { useState } from 'react';
+
+
+
+
+import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -309,6 +313,17 @@ const TodoList = ({ todos, setTodos }) => {
   const [draggedStartTime, setDraggedStartTime] = useState(null);
   const [draggedEndTime, setDraggedEndTime] = useState(null);
   const [error, setError] = useState('');
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   const handleAddTodo = () => {
     if (
@@ -391,15 +406,13 @@ const TodoList = ({ todos, setTodos }) => {
         const newStartTime = new Date(draggedStartTime);
         const newEndTime = new Date(draggedEndTime);
 
-        if (destination.date) {
-          newStartTime.setFullYear(destination.date.getFullYear());
-          newStartTime.setMonth(destination.date.getMonth());
-          newStartTime.setDate(destination.date.getDate());
+        newStartTime.setFullYear(destination.date.getFullYear());
+        newStartTime.setMonth(destination.date.getMonth());
+        newStartTime.setDate(destination.date.getDate());
 
-          newEndTime.setFullYear(destination.date.getFullYear());
-          newEndTime.setMonth(destination.date.getMonth());
-          newEndTime.setDate(destination.date.getDate());
-        }
+        newEndTime.setFullYear(destination.date.getFullYear());
+        newEndTime.setMonth(destination.date.getMonth());
+        newEndTime.setDate(destination.date.getDate());
 
         return {
           ...todo,
@@ -424,6 +437,76 @@ const TodoList = ({ todos, setTodos }) => {
       return date.toLocaleString();
     }
     return '';
+  };
+
+  const CountdownTimer = ({ endTime }) => {
+    const timeDifference = endTime - currentTime;
+    const seconds = Math.floor((timeDifference / 1000) % 60);
+    const minutes = Math.floor((timeDifference / 1000 / 60) % 60);
+    const hours = Math.floor((timeDifference / (1000 * 60 * 60)) % 24);
+    const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+
+    return (
+      <div className={styles.todoCountdown}>
+        Time Remaining: {days}d {hours}h {minutes}m {seconds}s
+      </div>
+    );
+  };
+
+  const renderTodoItems = () => {
+    const sortedTodos = todos.slice().sort((a, b) => a.startTime - b.startTime);
+
+    return sortedTodos.map((todo, index) => (
+      <Draggable key={index} draggableId={index.toString()} index={index}>
+        {(provided) => (
+          <div
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+            ref={provided.innerRef}
+            className={styles.todoItem}
+          >
+            <div className={styles.todoText}>{todo.todo}</div>
+            {index === editIndex ? (
+              <div className={styles.editFields}>
+                <DatePicker
+                  selected={editStartTime}
+                  onChange={(date) => setEditStartTime(date)}
+                  showTimeSelect
+                  dateFormat="Pp"
+                  placeholderText="Start Time"
+                  className={styles.datePicker}
+                />
+                <DatePicker
+                  selected={editEndTime}
+                  onChange={(date) => setEditEndTime(date)}
+                  showTimeSelect
+                  dateFormat="Pp"
+                  placeholderText="End Time"
+                  className={styles.datePicker}
+                />
+                <button onClick={handleSaveEdit} className={styles.saveButton}>
+                  Save
+                </button>
+                <button onClick={handleCancelEdit} className={styles.cancelButton}>
+                  Cancel
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className={styles.todoTime}>
+                  {formatDateTime(todo.startTime)} - {formatDateTime(todo.endTime)}
+                </div>
+                <div className={styles.todoActions}>
+                  <button onClick={() => handleEditTodo(index)}>Edit</button>
+                  <button onClick={() => handleDeleteTodo(index)}>Delete</button>
+                </div>
+                <CountdownTimer endTime={todo.endTime} />
+              </>
+            )}
+          </div>
+        )}
+      </Draggable>
+    ));
   };
 
   return (
@@ -462,56 +545,7 @@ const TodoList = ({ todos, setTodos }) => {
         <Droppable droppableId="todos">
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
-              {todos.map((todo, index) => (
-                <Draggable key={index} draggableId={index.toString()} index={index}>
-                  {(provided) => (
-                    <div
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      ref={provided.innerRef}
-                      className={styles.todoItem}
-                    >
-                      <div className={styles.todoText}>{todo.todo}</div>
-                      {index === editIndex ? (
-                        <div className={styles.editFields}>
-                          <DatePicker
-                            selected={editStartTime}
-                            onChange={(date) => setEditStartTime(date)}
-                            showTimeSelect
-                            dateFormat="Pp"
-                            placeholderText="Start Time"
-                            className={styles.datePicker}
-                          />
-                          <DatePicker
-                            selected={editEndTime}
-                            onChange={(date) => setEditEndTime(date)}
-                            showTimeSelect
-                            dateFormat="Pp"
-                            placeholderText="End Time"
-                            className={styles.datePicker}
-                          />
-                          <button onClick={handleSaveEdit} className={styles.saveButton}>
-                            Save
-                          </button>
-                          <button onClick={handleCancelEdit} className={styles.cancelButton}>
-                            Cancel
-                          </button>
-                        </div>
-                      ) : (
-                        <>
-                          <div className={styles.todoTime}>
-                            {formatDateTime(todo.startTime)} - {formatDateTime(todo.endTime)}
-                          </div>
-                          <div className={styles.todoActions}>
-                            <button onClick={() => handleEditTodo(index)}>Edit</button>
-                            <button onClick={() => handleDeleteTodo(index)}>Delete</button>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  )}
-                </Draggable>
-              ))}
+              {renderTodoItems()}
               {provided.placeholder}
             </div>
           )}
@@ -522,3 +556,4 @@ const TodoList = ({ todos, setTodos }) => {
 };
 
 export default TodoList;
+
