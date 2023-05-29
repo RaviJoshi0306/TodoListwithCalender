@@ -140,3 +140,86 @@
   background-color: #0366d6;
   color: white;
 }
+.editButton {
+  padding: 4px 8px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.deleteButton {
+  padding: 4px 8px;
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.editButton:hover {
+  background-color: darkblue;
+}
+.todoActions {
+  margin-top: 8px;
+}
+
+
+
+.editButton {
+  /* Existing styles for the edit button */
+  margin-left: 8px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.inputContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Added */
+  margin-bottom: 20px;
+}
+
+.input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+.datePicker {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+.addButton {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 10px; /* Added */
+}
+
+
+
+
+
+
+
