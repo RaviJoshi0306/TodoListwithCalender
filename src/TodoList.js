@@ -393,38 +393,52 @@ const TodoList = ({ todos, setTodos }) => {
     if (!result.destination) return;
     const { source, destination } = result;
     if (source.index === destination.index) return;
-
+  
     const updatedTodos = Array.from(todos);
     const [draggedTodo] = updatedTodos.splice(source.index, 1);
     updatedTodos.splice(destination.index, 0, draggedTodo);
-
+  
     const draggedStartTime = draggedTodo.startTime;
     const draggedEndTime = draggedTodo.endTime;
-
+  
     const updatedTodosWithTime = updatedTodos.map((todo, index) => {
       if (index === destination.index) {
         const newStartTime = new Date(draggedStartTime);
         const newEndTime = new Date(draggedEndTime);
-
+  
+        // Update start and end dates based on the destination date
         newStartTime.setFullYear(destination.date.getFullYear());
         newStartTime.setMonth(destination.date.getMonth());
         newStartTime.setDate(destination.date.getDate());
-
+  
         newEndTime.setFullYear(destination.date.getFullYear());
         newEndTime.setMonth(destination.date.getMonth());
         newEndTime.setDate(destination.date.getDate());
-
+  
+        // Calculate remaining time based on the new end day
+        const currentTime = new Date();
+        const timeDifference = newEndTime.getTime() - currentTime.getTime();
+        const remainingDays = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+        const remainingHours = Math.floor((timeDifference / (1000 * 60 * 60)) % 24);
+        const remainingMinutes = Math.floor((timeDifference / (1000 * 60)) % 60);
+        const remainingSeconds = Math.floor((timeDifference / 1000) % 60);
+  
         return {
           ...todo,
           startTime: newStartTime,
           endTime: newEndTime,
+          remainingDays,
+          remainingHours,
+          remainingMinutes,
+          remainingSeconds,
         };
       }
       return todo;
     });
-
+  
     setTodos(updatedTodosWithTime);
   };
+  
 
   const handleDragStart = (start) => {
     const { startTime, endTime } = todos[start.source.index];
@@ -438,21 +452,24 @@ const TodoList = ({ todos, setTodos }) => {
     }
     return '';
   };
-
   const CountdownTimer = ({ endTime }) => {
-    const timeDifference = endTime - currentTime;
-    const seconds = Math.floor((timeDifference / 1000) % 60);
-    const minutes = Math.floor((timeDifference / 1000 / 60) % 60);
-    const hours = Math.floor((timeDifference / (1000 * 60 * 60)) % 24);
-    const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-
+    if (endTime === null) {
+      return null; // or you can return a placeholder message or alternative content
+    }
+  
+    const timeDifference = endTime.getTime() - currentTime.getTime();
+    const remainingDays = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    const remainingHours = Math.floor((timeDifference / (1000 * 60 * 60)) % 24);
+    const remainingMinutes = Math.floor((timeDifference / (1000 * 60)) % 60);
+    const remainingSeconds = Math.floor((timeDifference / 1000) % 60);
+  
     return (
       <div className={styles.todoCountdown}>
-        Time Remaining: {days}d {hours}h {minutes}m {seconds}s
+        Remaining Time: {remainingDays}d {remainingHours}h {remainingMinutes}m {remainingSeconds}s
       </div>
     );
   };
-
+  
   const renderTodoItems = () => {
     const sortedTodos = todos.slice().sort((a, b) => a.startTime - b.startTime);
 
